@@ -1,0 +1,52 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Attach",
+            "type": "python",
+            "request": "attach",
+            "connect": {
+                "host": "localhost", // replace this with remote machine name
+                "port": 12983
+            }
+        },
+        {
+            "name": "Python: Remote Attach",
+            "type": "python",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 12983
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "."
+                }
+            ],
+            "justMyCode": true
+        },
+        {
+            "name": "(gdb) Attach python",
+            "type": "cppdbg",
+            "request": "attach",
+            "program": "/root/anaconda3/envs/py38/bin/python", /* My virtual env */
+            "processId": "${command:pickProcess}",
+            "miDebuggerPath": "/usr/bin/gdb",
+            // "miDebuggerPath": "/home/caikun/gdb.sh",
+            // "miDebuggerPath": "${workspaceFolder}/gdb.sh",
+            // "additionalSOLibSearchPath": "/home/caikun/code/pytorch/torch/gdblib:/home/caikun/code/dipu_poc/torch_dipu:/home/caikun/code/DIOPI/DIOPI-IMPL/lib",
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}

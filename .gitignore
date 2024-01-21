@@ -1,0 +1,34 @@
+.vscode/settings.json
+.idea
+
+cmake-build-debug
+build
+*.pt
+*.pth
+*.pyc
+*.rb
+*.so
+compile_commands.json
+
+.cache
+*.cu
+*.out
+
+*.egg-info
+
+
+*.dot
+
+# pytest
+.hypothesis/
+.pytest_cache/
+.benchmarks/
+
+*.nvvp
+
+# figure
+*.pdf
+*.jpg
+*.png
+!docs/imgs/*.jpg
+!docs/imgs/*.png
