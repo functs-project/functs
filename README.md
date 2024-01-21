@@ -3,12 +3,15 @@
 - ***paper correction***
   - [Figure 2](./docs/imgs/ControlDependencyMemoryDependency.png): `%b.5`->`%b.1.`
 - ***paper notation***
-  - [Figure 3](./docs/imgs/TensorSSAExample.png): In (c), the number before `immut::Access`, `immut::Assign` and `tensorssa::Update` is the line number in (d). We illustrate more details of [Figure 3](./docs/imgs/TensorSSAExample.png) in this README file.
+  - [Figure 3](./docs/imgs/TensorSSAExample.png): In (c), the number before `immut::Access`, `immut::Assign` and `tensorssa::Update` is the line number in (d). We illustrated more details of [Figure 3](./docs/imgs/TensorSSAExample.png) in this README file.
 
 ## Bulid from source
 
 - dependency: PyTorch is all you need to compile `functs`:
   - supported PyTorch verison: V2.1.0
+- Platform
+  - supported os: Linux
+  - NVIDIA GPU
 
 ```shell
 pip install torch==2.1.0

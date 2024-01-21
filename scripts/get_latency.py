@@ -12,7 +12,7 @@ from functs.benchmark.utils import process_feat_batch
 from functs.utils import evaluate_func, evaluate_task
 
 torch._dynamo.reset()
-
+torch._dynamo.config.suppress_errors = True
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--bs", default=1, type=int)

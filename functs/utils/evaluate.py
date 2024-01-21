@@ -12,16 +12,16 @@ import torch
 from torch.autograd import DeviceType
 from torch.profiler import ProfilerActivity
 
-from .prof import (
-    all_passes_submitted,
-    begin_profiler_pass,
-    disable_profiling,
-    enable_profiling,
-    end_profiler_pass,
-    finalize_metrics,
-    initialize_metrics,
-    print_profiling_results,
-)
+# from .prof import (
+#     all_passes_submitted,
+#     begin_profiler_pass,
+#     disable_profiling,
+#     enable_profiling,
+#     end_profiler_pass,
+#     finalize_metrics,
+#     initialize_metrics,
+#     print_profiling_results,
+# )
 
 
 # from prof import (all_passes_submitted, begin_profiler_pass, disable_profiling,
@@ -155,7 +155,7 @@ def evaluate_task(
     torch.cuda.synchronize()
     timer = Timer(name)
     begin = timer.start()
-    enable_profiling()
+    # enable_profiling()
     cnt = 0
     while timer.time() - begin < run_duration:
         task(cnt)
@@ -163,8 +163,8 @@ def evaluate_task(
         timer.observe()
         torch.cuda.synchronize()
     timer.report(clear=False)
-    disable_profiling()
-    print_profiling_results(timer.cnt)
+    # disable_profiling()
+    # print_profiling_results(timer.cnt)
 
     return timer
 
@@ -185,7 +185,7 @@ def evaluate_func(
     torch.cuda.synchronize()
     timer = Timer(name)
     begin = timer.start()
-    enable_profiling()
+    # enable_profiling()
     while timer.time() - begin < run_duration:
         if not enable_cudagraph:
             func(*args)
@@ -203,8 +203,8 @@ def evaluate_func(
                         timer.observe()
             torch.cuda.synchronize()
     timer.report(clear=False)
-    disable_profiling()
-    print_profiling_results(timer.cnt)
+    # disable_profiling()
+    # print_profiling_results(timer.cnt)
     return timer
 
 

@@ -7,112 +7,112 @@ from typing import Dict, Optional
 
 import torch
 
-ltprof_path = os.path.join(os.path.dirname(__file__), "../lib/libltprof.so")
-_lib = ctypes.cdll.LoadLibrary(ltprof_path)
+# ltprof_path = os.path.join(os.path.dirname(__file__), "../lib/libltprof.so")
+# _lib = ctypes.cdll.LoadLibrary(ltprof_path)
 
-_enabled = False
-
-
-def metrics_enabled():
-    return os.getenv("ENABLE_METRICS") is not None
+# _enabled = False
 
 
-def initialize_metrics():
-    _lib.initializeMetrics()
+# def metrics_enabled():
+#     return os.getenv("ENABLE_METRICS") is not None
 
 
-def finalize_metrics():
-    _lib.finalizeMetrics()
+# def initialize_metrics():
+#     _lib.initializeMetrics()
 
 
-def begin_profiler_pass():
-    _lib.beginProfilerPass()
+# def finalize_metrics():
+#     _lib.finalizeMetrics()
 
 
-def end_profiler_pass():
-    _lib.endProfilerPass()
+# def begin_profiler_pass():
+#     _lib.beginProfilerPass()
 
 
-def all_passes_submitted():
-    return _lib.allPassesSubmitted()
+# def end_profiler_pass():
+#     _lib.endProfilerPass()
 
 
-def enable_profiling():
-    global _enabled
-    _lib.enableProfiling()
-    _enabled = True
+# def all_passes_submitted():
+#     return _lib.allPassesSubmitted()
 
 
-def disable_profiling():
-    global _enabled
-    _lib.enableProfiling()
-    _enabled = False
+# def enable_profiling():
+#     global _enabled
+#     _lib.enableProfiling()
+#     _enabled = True
 
 
-@dataclass
-class Record:
-    total: float = 0
-    min: float = float("inf")
-    max: float = 0
-    count: int = 0
-    begin: Optional[float] = None
+# def disable_profiling():
+#     global _enabled
+#     _lib.enableProfiling()
+#     _enabled = False
 
 
-_records: Dict[str, Record] = {}
+# @dataclass
+# class Record:
+#     total: float = 0
+#     min: float = float("inf")
+#     max: float = 0
+#     count: int = 0
+#     begin: Optional[float] = None
 
 
-def prof_begin(label: str):
-    if not _enabled:
-        return
-    torch.cuda.synchronize()
-    if label not in _records:
-        _records[label] = Record()
-    _records[label].begin = perf_counter()
+# _records: Dict[str, Record] = {}
 
 
-def prof_end(label: str):
-    if not _enabled:
-        return
-    torch.cuda.synchronize()
-    record = _records[label]
-    assert record.begin is not None
-    dur = perf_counter() - record.begin
-    record.begin = None
-    record.count += 1
-    record.total += dur
-    record.min = min(record.min, dur)
-    record.max = max(record.max, dur)
+# def prof_begin(label: str):
+#     if not _enabled:
+#         return
+#     torch.cuda.synchronize()
+#     if label not in _records:
+#         _records[label] = Record()
+#     _records[label].begin = perf_counter()
 
 
-def fmt_duration(dur: float):
-    units = ["s", "ms", "us", "ns"]
-    idx = 0
-    while idx < len(units) - 1 and dur < 1:
-        dur *= 1e3
-        idx += 1
-    return "{:.4}{}".format(dur, units[idx])
+# def prof_end(label: str):
+#     if not _enabled:
+#         return
+#     torch.cuda.synchronize()
+#     record = _records[label]
+#     assert record.begin is not None
+#     dur = perf_counter() - record.begin
+#     record.begin = None
+#     record.count += 1
+#     record.total += dur
+#     record.min = min(record.min, dur)
+#     record.max = max(record.max, dur)
 
 
-_record_fmt = "{:<16}{:>10}{:>10}{:>10}{:>10}{:>10}"
+# def fmt_duration(dur: float):
+#     units = ["s", "ms", "us", "ns"]
+#     idx = 0
+#     while idx < len(units) - 1 and dur < 1:
+#         dur *= 1e3
+#         idx += 1
+#     return "{:.4}{}".format(dur, units[idx])
 
 
-def print_profiling_results(count: int):
-    _lib.printProfilingResults(ctypes.c_size_t(int(count)))
-    if len(_records) == 0:
-        return
-    print("\nRanges:")
-    print(_record_fmt.format("Label", "Count", "Total", "Mean", "Min", "Max"))
-    for label, record in _records.items():
-        print(
-            _record_fmt.format(
-                label,
-                record.count,
-                fmt_duration(record.total),
-                fmt_duration(record.total / record.count),
-                fmt_duration(record.min),
-                fmt_duration(record.max),
-            )
-        )
+# _record_fmt = "{:<16}{:>10}{:>10}{:>10}{:>10}{:>10}"
+
+
+# def print_profiling_results(count: int):
+#     _lib.printProfilingResults(ctypes.c_size_t(int(count)))
+#     if len(_records) == 0:
+#         return
+#     print("\nRanges:")
+#     print(_record_fmt.format("Label", "Count", "Total", "Mean", "Min", "Max"))
+#     for label, record in _records.items():
+#         print(
+#             _record_fmt.format(
+#                 label,
+#                 record.count,
+#                 fmt_duration(record.total),
+#                 fmt_duration(record.total / record.count),
+#                 fmt_duration(record.min),
+#                 fmt_duration(record.max),
+#             )
+#         )
 
 
 class ProfileRewriter(ast.NodeTransformer):

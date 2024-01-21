@@ -12,20 +12,19 @@ from subprocess import check_call
 import torch
 from torch.utils.cpp_extension import CUDA_HOME, CUDNN_HOME, CppExtension, CUDAExtension
 
+# base_dir = os.path.realpath(os.path.dirname(__file__))
+# build_dir = os.path.join(base_dir, "build")
+# install_dir = os.path.join(base_dir, "functs")
+# torch_dir = os.path.dirname(torch.__file__)
+# torch_lib = os.path.join(torch_dir, "lib")
+# cmake_torch_dir = os.path.join(torch_dir, "share", "cmake", "Torch")
+# # cmake_torchvision_dir = "~/src/meta/vision_install/share/cmake/TorchVision/"
 
-base_dir = os.path.realpath(os.path.dirname(__file__))
-build_dir = os.path.join(base_dir, "build")
-install_dir = os.path.join(base_dir, "functs")
-torch_dir = os.path.dirname(torch.__file__)
-torch_lib = os.path.join(torch_dir, "lib")
-cmake_torch_dir = os.path.join(torch_dir, "share", "cmake", "Torch")
-# cmake_torchvision_dir = "~/src/meta/vision_install/share/cmake/TorchVision/"
-
-cmake_path = "cmake"
-cmake_python_include_dir = sysconfig.get_path("include")
-cmake_python_library = "{}/{}".format(
-    sysconfig.get_config_var("LIBDIR"), sysconfig.get_config_var("INSTSONAME")
-)
+# cmake_path = "cmake"
+# cmake_python_include_dir = sysconfig.get_path("include")
+# cmake_python_library = "{}/{}".format(
+#     sysconfig.get_config_var("LIBDIR"), sysconfig.get_config_var("INSTSONAME")
+# )
 
 def get_extensions():
     extra_compile_args = {"cxx": ["-std=c++17"]}
